@@ -1,7 +1,7 @@
-const express = require("express");
-const { body } = require("express-validator");
-const { register, login, getMe } = require("../controllers/authController");
-const { protect } = require("../middleware/authMiddleware");
+import express from "express";
+import { body } from "express-validator";
+import { register, login, getMe } from "./auth.controller.js";
+import protect from "../../middleware/auth.middleware.js";
 
 const router = express.Router();
 
@@ -26,4 +26,4 @@ router.post(
 
 router.get("/me", protect, getMe);
 
-module.exports = router;
+export default router;

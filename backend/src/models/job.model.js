@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const jobSchema = new mongoose.Schema(
   {
@@ -53,8 +53,9 @@ const jobSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Index for faster queries per user
 jobSchema.index({ user: 1, status: 1 });
 jobSchema.index({ user: 1, createdAt: -1 });
 
-module.exports = mongoose.model("Job", jobSchema);
+const Job = mongoose.model("Job", jobSchema);
+
+export default Job;

@@ -1,11 +1,11 @@
-const express = require("express");
-const { body } = require("express-validator");
-const { getJobs, getJob, createJob, updateJob, deleteJob } = require("../controllers/jobController");
-const { protect } = require("../middleware/authMiddleware");
+import express from "express";
+import { body } from "express-validator";
+import { getJobs, getJob, createJob, updateJob, deleteJob } from "./jobs.controller.js";
+import protect from "../../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-// All routes protected
+// All job routes require login
 router.use(protect);
 
 const jobValidation = [
@@ -17,4 +17,4 @@ const jobValidation = [
 router.route("/").get(getJobs).post(jobValidation, createJob);
 router.route("/:id").get(getJob).put(updateJob).delete(deleteJob);
 
-module.exports = router;
+export default router;

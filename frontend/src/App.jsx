@@ -4,6 +4,8 @@ import PrivateRoute from "./components/auth/PrivateRoute";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import AnalyzePage from "./pages/AnalyzePage";
+import AnalysisDetailPage from "./pages/AnalysisDetailPage";
 
 export default function App() {
   return (
@@ -17,6 +19,22 @@ export default function App() {
             element={
               <PrivateRoute>
                 <DashboardPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/analyze"
+            element={
+              <PrivateRoute>
+                <AnalyzePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/analyze/:id"
+            element={
+              <PrivateRoute>
+                <AnalysisDetailPage />
               </PrivateRoute>
             }
           />
