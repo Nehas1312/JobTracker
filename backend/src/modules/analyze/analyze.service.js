@@ -1,16 +1,14 @@
-import fs from "fs";
+
 import pdfParse from "pdf-parse/lib/pdf-parse.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import Analysis from "../../models/analysis.model.js";
 
 
-// Read PDF from disk and pull out plain text
-export const extractTextFromPDF = async (filePath) => {
-  const buffer = fs.readFileSync(filePath);
-  const data = await pdfParse(buffer);
+
+export const extractTextFromPDF = async (fileBuffer) => {
+  const data = await pdfParse(fileBuffer);
   return data.text;
 };
-
 
 // Prompt for resume-only analysis
 const buildResumePrompt = (resumeText) => `

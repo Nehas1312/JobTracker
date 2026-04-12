@@ -1,4 +1,4 @@
-import fs from "fs";
+
 import {
   extractTextFromPDF,
   analyzeResumeService,
@@ -7,12 +7,7 @@ import {
   getSingleAnalysisService,
 } from "./analyze.service.js";
 
-// Helper to delete uploaded file after we are done with it
-const cleanupFile = (filePath) => {
-  if (filePath && fs.existsSync(filePath)) {
-    fs.unlinkSync(filePath);
-  }
-};
+
 
 // @route  POST /api/analyze
 // @access Private
@@ -22,7 +17,7 @@ export const analyzeResume = async (req, res) => {
   }
 
   try {
-    const resumeText = await extractTextFromPDF(req.file.path);
+    const resumeText = await extractTextFromPDF(req.file.buffer);
 
     if (!resumeText || resumeText.trim().length < 50) {
       return res.status(400).json({
@@ -35,10 +30,7 @@ export const analyzeResume = async (req, res) => {
     res.status(201).json({ success: true, analysis });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
-  } finally {
-    // Always delete the PDF — we never store resumes on the server
-    cleanupFile(req.file?.path);
-  }
+  } 
 };
 
 // @route  POST /api/analyze/match
@@ -55,7 +47,7 @@ export const analyzeMatch = async (req, res) => {
   }
 
   try {
-    const resumeText = await extractTextFromPDF(req.file.path);
+    const resumeText = await extractTextFromPDF(req.file.buffer);
 
     if (!resumeText || resumeText.trim().length < 50) {
       return res.status(400).json({
@@ -68,9 +60,7 @@ export const analyzeMatch = async (req, res) => {
     res.status(201).json({ success: true, analysis });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
-  } finally {
-    cleanupFile(req.file?.path);
-  }
+  } 
 };
 
 // @route  GET /api/analyze/history
