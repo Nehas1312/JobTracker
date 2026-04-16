@@ -1,41 +1,55 @@
-const variants = {
-  primary: {
-    background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
-    color: "#fff", border: "none",
-  },
-  secondary: {
-    background: "#1E2433", color: "#9CA3AF", border: "none",
-  },
-  danger: {
-    background: "#1E2433", color: "#F87171", border: "none",
-  },
-  ghost: {
-    background: "transparent", color: "#6B7280", border: "none",
-  },
-};
+export default function Button({ children, variant = "primary", onClick, disabled, size = "md", style = {} }) {
+  const base = {
+    fontFamily: "var(--font-body)",
+    fontWeight: 600,
+    cursor: disabled ? "not-allowed" : "pointer",
+    opacity: disabled ? 0.5 : 1,
+    border: "none",
+    transition: "all 0.15s",
+    borderRadius: "var(--radius)",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+  };
 
-export default function Button({ children, variant = "primary", onClick, disabled, style = {}, size = "md" }) {
-  const padding = size === "sm" ? "5px 12px" : size === "lg" ? "12px 24px" : "8px 16px";
-  const fontSize = size === "sm" ? 12 : size === "lg" ? 15 : 13;
+  const sizes = {
+    sm: { padding: "6px 14px", fontSize: 12 },
+    md: { padding: "9px 18px", fontSize: 13 },
+    lg: { padding: "12px 24px", fontSize: 14 },
+  };
+
+  const variants = {
+    primary: {
+      background: "var(--accent)",
+      color: "#fff",
+    },
+    secondary: {
+      background: "var(--bg-raised)",
+      color: "var(--text-2)",
+    },
+    danger: {
+      background: "var(--bg-raised)",
+      color: "var(--rejected)",
+    },
+    ghost: {
+      background: "transparent",
+      color: "var(--text-2)",
+    },
+    outline: {
+      background: "transparent",
+      color: "var(--accent)",
+      border: "1px solid var(--accent)",
+    },
+  };
 
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      style={{
-        ...variants[variant],
-        padding,
-        fontSize,
-        fontWeight: 500,
-        borderRadius: 8,
-        cursor: disabled ? "not-allowed" : "pointer",
-        opacity: disabled ? 0.6 : 1,
-        transition: "opacity 0.15s",
-        fontFamily: "var(--font-sans)",
-        ...style,
-      }}
-      onMouseEnter={(e) => { if (!disabled) e.currentTarget.style.opacity = "0.85"; }}
-      onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
+      style={{ ...base, ...sizes[size], ...variants[variant], ...style }}
+      onMouseEnter={e => { if (!disabled) e.currentTarget.style.opacity = "0.85"; }}
+      onMouseLeave={e => { e.currentTarget.style.opacity = "1"; }}
     >
       {children}
     </button>

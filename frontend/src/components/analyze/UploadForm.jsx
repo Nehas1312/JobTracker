@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import Button from "../ui/Button";
 
-export default function UploadForm({ onAnalyze, loading }) {
+export default function UploadForm({ onAnalyze, loading }){
   const [file, setFile]               = useState(null);
   const [jobDescription, setJobDesc]  = useState("");
   const [dragging, setDragging]       = useState(false);

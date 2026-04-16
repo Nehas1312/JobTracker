@@ -1,9 +1,17 @@
 import { useState } from "react";
-import { STATUSES, STATUS_STYLES } from "../../utils/constants";
+import { STATUSES } from "../../utils/constants";
 import JobCard from "./JobCard";
 
+const STATUS_CONFIG = {
+  Saved:     { color: "var(--saved)",     label: "Saved" },
+  Applied:   { color: "var(--applied)",   label: "Applied" },
+  Interview: { color: "var(--interview)", label: "Interview" },
+  Offer:     { color: "var(--offer)",     label: "Offer" },
+  Rejected:  { color: "var(--rejected)",  label: "Rejected" },
+};
+
 export default function KanbanBoard({ jobs, onEdit, onDelete, onStatusChange }) {
-  const [dragId, setDragId]   = useState(null);
+  const [dragId,   setDragId]   = useState(null);
   const [dragOver, setDragOver] = useState(null);
 
   const handleDrop = (col) => {
@@ -13,52 +21,43 @@ export default function KanbanBoard({ jobs, onEdit, onDelete, onStatusChange }) 
   };
 
   return (
-    <div style={{ display: "flex", gap: 14, overflowX: "auto", paddingBottom: 8 }}>
-      {STATUSES.map((col) => {
-        const colJobs = jobs.filter((j) => j.status === col);
-        const st = STATUS_STYLES[col];
-        const isOver = dragOver === col;
+    <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 8 }}>
+      {STATUSES.map(col => {
+        const colJobs = jobs.filter(j => j.status === col);
+        const cfg     = STATUS_CONFIG[col];
+        const isOver  = dragOver === col;
 
         return (
           <div
             key={col}
-            onDragOver={(e) => { e.preventDefault(); setDragOver(col); }}
+            onDragOver={e => { e.preventDefault(); setDragOver(col); }}
             onDrop={() => handleDrop(col)}
             onDragLeave={() => setDragOver(null)}
             style={{
-              flex: "0 0 230px",
-              background: isOver ? "var(--bg-tertiary)" : "var(--bg-secondary)",
-              border: `1px solid ${isOver ? st.dot : "var(--border)"}`,
+              flex: "0 0 222px",
+              background: isOver ? "#F9F6F2" : "var(--bg-raised)",
+              border: `1px solid ${isOver ? cfg.color : "var(--border)"}`,
               borderRadius: "var(--radius-lg)",
-              transition: "all 0.2s",
-              minHeight: 400,
+              transition: "all 0.15s",
+              minHeight: 420,
             }}
           >
             {/* Column header */}
-            <div
-              style={{
-                padding: "13px 16px 10px",
-                borderBottom: "1px solid var(--border)",
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: st.dot, display: "inline-block" }} />
-                <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text-secondary)" }}>{col}</span>
+            <div style={{ padding: "12px 14px 10px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                <span style={{ width: 7, height: 7, borderRadius: "50%", background: cfg.color, display: "inline-block" }} />
+                <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)", letterSpacing: "0.03em" }}>
+                  {col.toUpperCase()}
+                </span>
               </div>
-              <span
-                style={{
-                  fontSize: 11, background: "var(--bg-primary)", color: "var(--text-muted)",
-                  padding: "2px 8px", borderRadius: 20,
-                }}
-              >
+              <span style={{ fontSize: 11, background: "var(--bg-card)", color: "var(--text-3)", padding: "2px 7px", borderRadius: 20, border: "1px solid var(--border)", fontWeight: 600 }}>
                 {colJobs.length}
               </span>
             </div>
 
             {/* Cards */}
-            <div style={{ padding: 10, display: "flex", flexDirection: "column", gap: 10 }}>
-              {colJobs.map((job) => (
+            <div style={{ padding: 10, display: "flex", flexDirection: "column", gap: 8 }}>
+              {colJobs.map(job => (
                 <JobCard
                   key={job._id}
                   job={job}
@@ -68,8 +67,8 @@ export default function KanbanBoard({ jobs, onEdit, onDelete, onStatusChange }) 
                 />
               ))}
               {colJobs.length === 0 && (
-                <div style={{ textAlign: "center", color: "var(--text-faint)", fontSize: 12, padding: "28px 0" }}>
-                  Drop jobs here
+                <div style={{ textAlign: "center", color: "var(--text-3)", fontSize: 12, padding: "32px 0", fontStyle: "italic" }}>
+                  Drop here
                 </div>
               )}
             </div>
